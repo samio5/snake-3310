@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         randomApple()
         direction = 1
         scoreDisplay.innerHTML = score
-        intervalTime = 1000
+        intervalTime = 500
         currentSnake = [2,1,0]
         currentIndex = 0
         currentSnake.forEach(index => squares[index].classList.add("snake"))
@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
             (currentIndex[0] - width < 0 && direction === -width) || //* if snake hits the top
             squares[currentSnake[0] + direction].classList.contains("snake") //* if snake goes into itself
         ) {
+            scoreDisplay.innerHTML = "YOU DIED"
             return clearInterval(interval) //* this will clear the interval if any of the above happens
         }
 
@@ -67,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function randomApple() {
         do{
            appleIndex = Math.floor(Math.random() * squares.length) 
-        } while(squares[appleIndex].classList.contains("snake")) //* making sure apples down spawn where snake is present
+        } while(squares[appleIndex].classList.contains("snake")) //* making sure apples don't appear on snake
         squares[appleIndex].classList.add("apple")
     }
 
