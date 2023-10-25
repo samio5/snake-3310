@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let currentIndex = 0 //* first div in our grid
     let appleIndex = 0 //* first div in our grid
-    let currentSnake = [2,1,0] //* this is the structure of the snake. 2 being the head, 1 being the body and 0 as the tail.
-    let direction = 1 //* 1 meaning snake is moving to the right
+    let currentSnake = [2,1,0] //* this is the structure of the snake. 2 = head, 1 = body, and 0 = tail.
+    let direction = 1 //* 1 meaning snake is moving one div down the array ie, to the right.
     let score = 0
     let speed = 0.9
     let intervalTime = 0
