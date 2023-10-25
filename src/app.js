@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const squares = document.querySelectorAll(".grid div")
     const scoreDisplay = document.querySelector("span")
-    const startBtn = document.getElementsByClassName("start")
+    const startBtn = document.querySelector(".start")
 
     const width = 10
 
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         squares[appleIndex].classList.remove("apple")
         clearInterval(interval)
         score = 0
-        //randomApple()
+        randomApple()
         direction = 1
         scoreDisplay.innerHTML = score
         intervalTime = 1000
@@ -32,18 +32,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //! Function that deals with all outcomes of Snake
     function moveOutcomes() {
-
         //^ deals with the snake hitting border and snake hitting itself
-        if {
-
+        if (
+            (currentSnake[0] + width >=(width * width) && direction === width) || //* if snake hits bottom
+            (currentSnake[0] % width === width -1 && direction === 1) || //* if snake hits right wall
+            (currentSnake[0] % width === 0 && direction === -1) || //* if snake hits left wall
+            (currentIndex[0] - width < 0 && direction === -width) || //* if snake hits the top
+            squares[currentSnake[0] + direction].classList.contains("snake") //* if snake goes into itself
+        ) {
+            return clearInterval(interval) //* this will clear the interval if any of the above happens
         }
+
+        const tail = currentSnake.pop() //* removes he last ite of the array and shows it
+        squares[tail].classList.remove("snake") //* removes class of snake from the tail
+        currentSnake.unshift(currentSnake[0] + direction) //* gives direction to the head of the array
+
+
+        //^ deals with snake eating an apple
+        if(squares[currentSnake[0]].classList.contains("apple")) {
+            squares[currentSnake[0]].classList.remove("apple")
+            squares[tail].classList.add("snake")
+            currentSnake.push(tail)
+            randomApple()
+            score++
+            scoreDisplay.textContent = score
+            clearInterval(interval)
+            intervalTime = intervalTime * speed
+            interval = setInterval(moveOutcomes, intervalTime)
+        }
+        squares[currentSnake[0]].classList.add("snake")
+    }
+
+    //! Generate new Apple once apple is eaten
+    function randomApple() {
+        do{
+           appleIndex = Math.floor(Math.random() * squares.length) 
+        } while(squares[appleIndex].classList.contains("snake")) //* making sure apples down spawn where snake is present
+        squares[appleIndex].classList.add("apple")
     }
 
     //! Movement
-    function movement(e) {
-        squares[currentIndex].classList.remove("snake") //* we are removing the class of snake from all the squares
-
-        /**
+    /**
          * A = 65
          * W = 87
          * D = 68
@@ -52,15 +81,18 @@ document.addEventListener("DOMContentLoaded", () => {
          * 38	Arrow Up
          * 39	Arrow Right
          * 40  	Arrow Down
-        */
-        
+    */
+
+    function movement(e) {
+        squares[currentIndex].classList.remove("snake") //* we are removing the class of snake from all the squares
+
         if (e.keyCode === 39) {
             direction = 1 //* arrow right
         } else if (e.keyCode === 68) {
             direction = 1 
 
         } else if (e.keyCode === 38) {
-            direction = -width //* if pressed, snake will go back ten divs appearing to go up.
+            direction = -width //* if pressed, snake will go backwards ten divs appearing to go up.
         } else if (e.keyCode === 87) {
             direction = -width
 
@@ -70,11 +102,13 @@ document.addEventListener("DOMContentLoaded", () => {
             direction = -1
 
         } else if (e.keyCode === 40) {
-            direction = +width //* if pressed, snake will go ten divs from where you are now
+            direction = +width //* if pressed, snake will go forwards ten divs from where you are now so snake will go down
         } else if (e.keyCode === 83) {
             direction = +width
         }
     }
 
     document.addEventListener("keydown", movement)
+    startBtn.addEventListener("click", startGame)
+
 })
